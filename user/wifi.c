@@ -62,6 +62,10 @@ esp_platform_check_ip(void)
 
             /* no wifi connection -> turn off the blue led */
             LED_toggle(BLUE_LED, LED_OFF);
+
+            /* re-arm the timer and check for the ip address after 30 secs */
+            os_timer_setfn(&wifi_con_test_timer, (os_timer_func_t *)esp_platform_check_ip, NULL);
+            os_timer_arm(&wifi_con_test_timer, 30000, 0);
         } else {
             /* re-arm the timer and check for the ip address */
             os_timer_setfn(&wifi_con_test_timer, (os_timer_func_t *)esp_platform_check_ip, NULL);
@@ -100,8 +104,8 @@ set_station_config(void)
 void
 wifi_init(void)
 {
-    /* set the chip in softAP + station mode */
-    wifi_set_opmode(STATIONAP_MODE); 
+    /* set the chip in station mode (no AP) */
+    wifi_set_opmode(STATION_MODE); 
 
     /* connect to the router */
     set_station_config();

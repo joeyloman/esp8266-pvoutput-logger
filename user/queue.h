@@ -34,4 +34,5 @@ post_queue pq[MAX_QUEUE_SIZE];
 extern int queue_count;
 
 extern void queue_post_items_to_pvoutput(void);
+extern void queue_post_items_to_thingspeak(void);
 extern void queue_update_post_queue(void);

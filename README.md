@@ -4,14 +4,11 @@ Esp8266-pvoutput-logger is a kWh meter s0 pulse log application for pvoutput.org
 
 ##Putting the software on your ESP chip
 
-First create a build environment on your favorite Linux distro (or maybe Cygwin under Windows?). The following steps will show you how to create it on Fedora:
+First create a build environment on your favorite Linux distro (or maybe Cygwin under Windows?). The following steps will show you how to create it on Fedora or Debian (tested on x86 and ARM):
 
-###Create the build environment on Fedora 23 (x86/ARM)
+###Install the required build packages
 
-Create the build directory:
-
-    mkdir ~/esp-devel
-
+####Fedora 23
 Add the rpmfusion repos:
 
     sudo dnf install --nogpgcheck \
@@ -23,6 +20,20 @@ Install the required packages:
     sudo dnf install make unrar autoconf automake libtool gcc gcc-c++ gperf flex \
     bison texinfo gawk ncurses-devel expat-devel python sed git pyserial patch \
     wget which file unzip bzip2
+    
+####Debian 8 Jessie
+
+Install the required packages:
+
+    sudo apt-get install make unrar-free autoconf automake libtool gcc g++ gperf flex \
+    bison texinfo gawk libncurses5-dev libexpat1-dev python sed git python-serial patch \
+    wget file unzip bzip2 libtool-bin
+
+###Create the ESP build environment
+
+Create the build directory:
+
+    mkdir ~/esp-devel
 
 Clone the SDK:
 
@@ -61,12 +72,9 @@ Get the internet of things SDK:
 
     mkdir esp_iot_sdk
     cd esp_iot_sdk
-    wget http://bbs.espressif.com/download/file.php?id=838 -O esp_iot_sdk_v1.4.0_15_09_18.zip
-    unzip esp_iot_sdk_v1.4.0_15_09_18.zip
-
-Add the following line to header of file "~/esp-devel/esp_iot_sdk/esp_iot_sdk_v1.4.0/include/osapi.h":
-
-    #include <c_types.h>
+    wget http://bbs.espressif.com/download/file.php?id=1079 -O esp_iot_sdk_V1.5.2_16_01_29.zip
+    unzip esp_iot_sdk_V1.5.2_16_01_29.zip
+    ln -s esp_iot_sdk_v1.5.2 esp_iot_sdk-latest
 
 ###Building the software
 
@@ -85,6 +93,9 @@ Wifi configuration:
 The number of blinks per kWh of your meter (for example: 1000 blinks):  
 \#define PULSE_FACTOR 1000
 
+The maximum power in watts your solar system can generate:
+\#define MAX_WATT_POWER 3924
+
 Configure your timezone (for example GMT+1):  
 \#define TIMEZONE +1
 
@@ -94,9 +105,17 @@ If you want to enable the dutch daylight savings time uncomment the following li
 Configure the post interval to pvoutput (for example: every 5 minutes):  
 \#define queue_post_interval 5
 
-Configure the pvoutput.org API key and systemid:  
+Choose your output client which you want to log your data to, PVOUTPUT or THINGSPEAK:
+\#define OUTPUT_CLIENT   PVOUTPUT
+
+If you want to use PVOutput, configure the pvoutput.org API key and systemid:  
 \#define PVOUTPUT_APIKEY "<Put your pvoutput apikey here>"  
 \#define PVOUTPUT_SYSTEMID "<Put your pvoutput systemid here>"
+
+If you want to log your data to ThingSpeak, configure the API key, the power field and the energy field:
+\#define THINGSPEAK_APIKEY "<Put your thingspeak apikey here>"
+\#define THINGSPEAK_POWER_FIELD "field1"
+\#define THINGSPEAK_ENERGY_FIELD "field2"
 
 ####Build the firmware and flash your chip:
 Execute the build.sh script:

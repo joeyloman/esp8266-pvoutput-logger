@@ -1,5 +1,5 @@
 /*
- * esp8266-pvoutput-logger project - date/time functions
+ * esp8266-pvoutput-logger project - thingspeak webclient functions
  *
  * Copyright (C) 2015 Joey Loman <joey@binbash.org>
  * 
@@ -17,27 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATE_TIME_H
-#define DATE_TIME_H
+extern struct espconn *tp_esp_conn;
 
-#define DATE_SIZE   10
-#define TIME_SIZE   8
-
-extern char date[DATE_SIZE+1];
-extern char time[TIME_SIZE+1];
-
-typedef struct
-{
-    unsigned int second; // 0-59
-    unsigned int minute; // 0-59
-    unsigned int hour;   // 0-23
-    unsigned int day;    // 1-31
-    unsigned int month;  // 1-12
-    unsigned int year;   // 0-99 (representing 2000-2099)
-} date_time_t;
-
-extern void date_time_format_line();
-extern void date_time_init(void);
-extern char *date_time_get_ts();
-
-#endif
+extern void thingspeak_prepare_webserver_connection(void);

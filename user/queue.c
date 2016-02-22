@@ -37,17 +37,40 @@ queue_post_items_to_pvoutput(void)
     int i;
 
     if (queue_count == 0) {
-        os_printf("[error] queue_post_items_to_pvoutput: post queue is empty!\r\n");
+        os_printf("[%s] [error] queue_post_items_to_pvoutput: post queue is empty!\r\n", date_time_get_ts());
 
         return;
     }
 
     for(i = 0; i < queue_count; i++) {
-        os_printf("[info] queue_post_items_to_pvoutput: posting the following values to pvoutput -> date: %s / time: %s / average power: %ld / total energy: %ld\r\n",
-            pq[i].q_date, pq[i].q_time, pq[i].q_power_gen, pq[i].q_total_energy_gen);
+        os_printf("[%s] [info] queue_post_items_to_pvoutput: posting the following values to pvoutput -> date: %s / time: %s / average power: %ld / total energy: %ld\r\n",
+            date_time_get_ts(), pq[i].q_date, pq[i].q_time, pq[i].q_power_gen, pq[i].q_total_energy_gen);
     }
 
     pvoutput_prepare_webserver_connection();
+}
+
+void
+queue_post_items_to_thingspeak(void)
+{
+#ifdef DEBUG
+    os_printf("[debug] queue_post_items_to_thingspeak\r\n");
+#endif
+
+    int i;
+
+    if (queue_count == 0) {
+        os_printf("[%s] [error] queue_post_items_to_thingspeak: post queue is empty!\r\n", date_time_get_ts());
+
+        return;
+    }
+
+    for(i = 0; i < queue_count; i++) {
+        os_printf("[%s] [info] queue_post_items_to_thingspeak: posting the following values to thingspeak -> date: %s / time: %s / average power: %ld / total energy: %ld\r\n",
+            date_time_get_ts(), pq[i].q_date, pq[i].q_time, pq[i].q_power_gen, pq[i].q_total_energy_gen);
+    }
+
+    thingspeak_prepare_webserver_connection();
 }
 
 void
@@ -83,7 +106,11 @@ queue_update_post_queue(void)
         pq[queue_count].q_power_gen = total_watt / interval_pulse_count;
     }
 
-    pq[queue_count].q_total_energy_gen = pulse_count;
+    /* calculate the Watt hours:
+     * 1000 Wh equals 1 kWh. if we know how many pulses equals 1kWh we can divide
+     * 100Wh with the PULSE_FACTOR.
+     */
+    pq[queue_count].q_total_energy_gen = pulse_count * (1000 / PULSE_FACTOR);
 
     queue_count++;
 

@@ -4,30 +4,32 @@ FW_FILE_2:=0x40000.bin
 
 TARGET_OUT:=image.elf
 OBJS:=driver/uart.o \
-      user/led.o \
-      user/interrupt.o \
-      user/date_time.o \
-      user/queue.o \
-      user/scheduler.o \
-      user/pvoutput_client.o \
-      user/wifi.o \
-      user/user_main.o
+	user/led.o \
+	user/interrupt.o \
+	user/date_time.o \
+	user/queue.o \
+	user/scheduler.o \
+	user/pvoutput_client.o \
+	user/thingspeak_client.o \
+	user/wifi.o \
+	user/user_main.o
 
 SRCS:=driver/uart.c \
-      user/led.c \
-      user/interrupt.c \
-      user/date_time.c \
-      user/queue.c \
-      user/scheduler.c \
-      user/pvoutput_client.c \
-      user/wifi.c \
-      user/user_main.c 
+	user/led.c \
+	user/interrupt.c \
+	user/date_time.c \
+	user/queue.c \
+	user/scheduler.c \
+	user/pvoutput_client.c \
+	user/thingspeak_client.c \
+	user/wifi.c \
+	user/user_main.c 
 
 ESP_DEVEL_FOLDER:=$(HOME)/esp-devel
 GCC_FOLDER:=$(ESP_DEVEL_FOLDER)/esp-open-sdk/xtensa-lx106-elf
 ESPTOOL_PY:=$(ESP_DEVEL_FOLDER)/esptool/esptool.py
 FW_TOOL:=$(ESP_DEVEL_FOLDER)/other/esptool/esptool
-SDK:=$(ESP_DEVEL_FOLDER)/esp_iot_sdk/esp_iot_sdk_v1.4.0
+SDK:=$(ESP_DEVEL_FOLDER)/esp_iot_sdk/esp_iot_sdk-latest
 PORT:=/dev/ttyUSB0
 
 XTLIB:=$(SDK)/lib
@@ -43,16 +45,13 @@ LDFLAGS_CORE:=\
 	-Wl,--relax -Wl,--gc-sections \
 	-L$(XTLIB) \
 	-L$(XTGCCLIB) \
-    $(GCC_FOLDER)/xtensa-lx106-elf/lib/libc.a \
-	$(SDK)/lib/liblwip.a \
-	$(SDK)/lib/libssl.a \
-	$(SDK)/lib/libupgrade.a \
-	$(SDK)/lib/libnet80211.a \
+	$(GCC_FOLDER)/xtensa-lx106-elf/lib/libc.a \
 	$(SDK)/lib/liblwip.a \
 	$(SDK)/lib/libwpa.a \
-	$(SDK)/lib/libnet80211.a \
+	$(SDK)/lib/libcrypto.a \
 	$(SDK)/lib/libphy.a \
 	$(SDK)/lib/libmain.a \
+	$(SDK)/lib/libnet80211.a \
 	$(SDK)/lib/libpp.a \
 	$(XTGCCLIB) \
 	-T $(SDK)/ld/eagle.app.v6.ld

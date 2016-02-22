@@ -133,7 +133,7 @@ pvoutput_post_data(void *arg)
     /* sent the data to the webserver */
     if (espconn_send(pvo_esp_conn, http_code, strlen(http_code)) != ESPCONN_OK) {
         /* if the connection was not ok, turn on the red light and disconnect from the server */
-        os_printf("[error] pvoutput_post_data: failed to post the data: [%s\r\n\r\n]", http_code);
+        os_printf("[%s] [error] pvoutput_post_data: failed to post the data: [%s\r\n\r\n]", date_time_get_ts(), http_code);
 
         /* turn on the red led */
         LED_toggle(RED_LED, LED_ON);
@@ -162,7 +162,7 @@ pvoutput_check_http_return_code(void *arg, char *pdata, unsigned short len)
     int post_success = 0;
 
 #ifdef DEBUG
-    os_printf("[debug] check_http_return_code:\r\n%s\r\n", pdata);
+    os_printf("[debug] pvoutput_check_http_return_code:\r\n%s\r\n", pdata);
 #endif
 
     /* check for a "HTTP/1.1 200 OK" return code */
@@ -180,7 +180,7 @@ pvoutput_check_http_return_code(void *arg, char *pdata, unsigned short len)
         }
     }
 
-    /* check if the data is successfully post */
+    /* check if the data is successfully posted */
     if (post_success == 1) {
 #ifdef DEBUG
         os_printf("[debug] pvoutput_check_http_return_code: reset the counter.\r\n");
@@ -192,7 +192,7 @@ pvoutput_check_http_return_code(void *arg, char *pdata, unsigned short len)
         /* reset the queue counter */
         queue_count = 0;
     } else {
-        os_printf("[error] pvoutput_check_http_return_code: failed to post the data!\r\n");
+        os_printf("[%s] [error] pvoutput_check_http_return_code: failed to post the data!\r\n", date_time_get_ts());
 
         /* turn on the red led */
         LED_toggle(RED_LED, LED_ON);
@@ -216,7 +216,7 @@ pvoutput_connect_to_webserver(void *arg)
 
     /* I think this check is not necessary because it's already done in pvoutput_esp_platform_dns_found */
     if (pvo_webserver_ip.addr == 0) {
-        os_printf("[error] pvoutput_connect_to_webserver: no ip address resolved!\r\n");
+        os_printf("[%s] [error] pvoutput_connect_to_webserver: no ip address resolved!\r\n", date_time_get_ts());
 
         /* no ip address resolved, cleanup and try again later */
         pvoutput_disconnect_and_cleanup(pvo_esp_conn);
@@ -249,7 +249,7 @@ pvoutput_connect_to_webserver(void *arg)
 LOCAL void ICACHE_FLASH_ATTR 
 pvoutput_esp_platform_dns_found(const char *name, ip_addr_t *ipaddr, void *arg) { 
 #ifdef DEBUG
-    os_printf("[debug] pvoutput_esp_platform_dns_found]\r\n");
+    os_printf("[debug] pvoutput_esp_platform_dns_found\r\n");
 #endif
 
     struct espconn *pvo_esp_conn = (struct espconn *)arg;
@@ -268,7 +268,7 @@ pvoutput_esp_platform_dns_found(const char *name, ip_addr_t *ipaddr, void *arg) 
         /* if the ip address is successfully resolved, connect to the webserver */
         pvoutput_connect_to_webserver(pvo_esp_conn);
     } else {
-        os_printf("[error] pvoutput_esp_platform_dns_found: failed to resolve the server hostname!\r\n");
+        os_printf("[%s] [error] pvoutput_esp_platform_dns_found: failed to resolve the server hostname!\r\n", date_time_get_ts());
 
         /* turn on the red led */
         LED_toggle(RED_LED, LED_ON);

@@ -23,6 +23,7 @@
 #include "led.h"
 #include "interrupt.h"
 #include "pvoutput_client.h"
+#include "thingspeak_client.h"
 
 /*
  * ESP8266 start function

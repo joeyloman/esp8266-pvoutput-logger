@@ -21,9 +21,11 @@
 #include "osapi.h"
 #include "gpio.h"
 
+#include "defs.h"
 #include "interrupt.h"
 #include "led.h"
 #include "config.h"
+#include "date_time.h"
 
 LOCAL os_timer_t power_interrupt_lock_timer;
 LOCAL os_timer_t update_time_counter_timer;
@@ -41,7 +43,24 @@ unsigned long total_watt = 0;
 void ICACHE_FLASH_ATTR
 unlock_power_interrupt(void)
 {
+#ifdef DEBUG
+    os_printf("[debug] unlock_power_interrupt: enabling interrupt.\r\n");
+#endif
+
     power_interrupt_lock = 0;
+
+    uint32_t gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
+
+#ifdef DEBUG
+    if (gpio_status & BIT(13)) {
+            os_printf("[debug] unlock_power_interrupt: interrupt bit is set.\r\n");
+    } else {
+            os_printf("[debug] unlock_power_interrupt: interrupt bit is NOT set.\r\n");
+    }
+#endif
+
+    /* reactivate interrupts for GPIO13 */
+    gpio_pin_intr_state_set(GPIO_ID_PIN(13), GPIO_PIN_INTR_POSEDGE);
 }
 
 void ICACHE_FLASH_ATTR
@@ -54,18 +73,32 @@ turn_off_interrupt_led(void)
 static void ICACHE_FLASH_ATTR
 power_interrupt(int8_t key)
 {
-    /* clear interrupt status <-- this needs to be done every time this function executes, otherwise the code will crash */
-    uint32_t gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
-    GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
-
 #ifdef DEBUG
-    os_printf("[debug] power_interrupt: interrupt detected.\r\n");
+    os_printf("[debug] power_interrupt\r\n");
 #endif
+
+    uint32_t gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
+
+    if (gpio_status & BIT(13)) {
+#ifdef DEBUG
+    os_printf("[debug] power_interrupt: interrupt detected, disabling interrupt.\r\n");
+#endif
+
+        /* disable interrupt for GPIO13 */
+        gpio_pin_intr_state_set(GPIO_ID_PIN(13), GPIO_PIN_INTR_DISABLE);
+
+        /* clear interrupt status for GPIO13 */
+        GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status & BIT(13));
+    } else {
+        os_printf("[%s] [error] power_interrupt: interrupt detected, but interrupt bit is not set!\r\n", date_time_get_ts());
+    }
 
     power_interrupt_lock++;
 
     /* if this function is executed multiple times between 100 ms, return */
     if (power_interrupt_lock > 1) {
+        os_printf("[%s] [error] power_interrupt: power_interrupt_lock is set [%d], skipping interrupt!\r\n",
+            date_time_get_ts(), power_interrupt_lock);
         return;
     }
 
@@ -80,6 +113,22 @@ power_interrupt(int8_t key)
             /* calculate the realtime power/watts */
             cur_power = (360000000 / (PULSE_FACTOR * time_counter));
 
+            /* if the current power is more then the maximum of your system (which you defined in pvoutput),
+             * skip this pulse. the pvoutput server will decline this value and your queue will not be emptied anymore!
+             * note: this can also happen if the pulse took longer then the power_interrupt_lock_timer.
+             */
+            if (cur_power > (MAX_WATT_POWER * 1.25)) {
+                os_printf("[%s] [error] power_interrupt: current power [%lu W] is more then the defined one in MAX_WATT_POWER * 125% [%d W], skipping pulse!\r\n",
+                    date_time_get_ts(), cur_power, (MAX_WATT_POWER * 1.25));
+
+                /* unlock the power interrupt (pulse has a delay of 100ms) */
+                os_timer_disarm(&power_interrupt_lock_timer);
+                os_timer_setfn(&power_interrupt_lock_timer, (os_timer_func_t *)unlock_power_interrupt, NULL);
+                os_timer_arm(&power_interrupt_lock_timer, 100, 0);
+
+                return;
+            }
+
             /* add the realtime power to the total amount of watts (which will be devided by the
              * interval_pulse_count before adding it to the queue
              */
@@ -92,16 +141,18 @@ power_interrupt(int8_t key)
         first_run = NO;
     }
 
-    os_printf("[info] power_interrupt: current power = %lu W / total power between interval = %lu W / pulse count today = %u / pulse count between interval = %u\r\n",
-        cur_power, total_watt, pulse_count, interval_pulse_count);
+#ifdef DEBUG
+    os_printf("[%s] [debug] power_interrupt: current power = %lu W / total power between interval = %lu W / pulse count today = %u / pulse count between interval = %u\r\n",
+        date_time_get_ts(), cur_power, total_watt, pulse_count, interval_pulse_count);
+#endif
 
     /* reset the time_counter to start a new calculation */
     time_counter = 0;
 
-    /* unlock the power interrupt (pulse has a delay of 100ms, but in practice this is sometimes higher) */
+    /* unlock the power interrupt (pulse has a delay of 100ms) */
     os_timer_disarm(&power_interrupt_lock_timer);
     os_timer_setfn(&power_interrupt_lock_timer, (os_timer_func_t *)unlock_power_interrupt, NULL);
-    os_timer_arm(&power_interrupt_lock_timer, 200, 0);
+    os_timer_arm(&power_interrupt_lock_timer, 100, 0);
 }
 
 void ICACHE_FLASH_ATTR

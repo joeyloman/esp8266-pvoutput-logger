@@ -17,9 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define YES 1
-#define NO  0
-
 extern uint32_t pulse_count;
 extern uint32_t interval_pulse_count;
 

@@ -21,6 +21,7 @@
 #include "osapi.h"
 #include "user_interface.h"
 
+#include "defs.h"
 #include "scheduler.h"
 #include "date_time.h"
 #include "queue.h"
@@ -193,8 +194,13 @@ scheduler_check_tasks(void)
             /* reset the power and interval pulse count variables */
             interrupt_reset_power_state();
 
-            /* try to post the queue items and if it's successfull empty the queue */
-            queue_post_items_to_pvoutput();
+            if (OUTPUT_CLIENT == PVOUTPUT) {
+                /* try to post the queue items and if it's successfull empty the queue */
+                queue_post_items_to_pvoutput();
+            } else if (OUTPUT_CLIENT == THINGSPEAK) {
+                /* try to post the queue items and if it's successfull empty the queue */
+                queue_post_items_to_thingspeak();
+            }
         }
     } else if (queue_post_interval == 15) {
         /* if the queue post interval is 15, post the queue every 15 minutes */
@@ -210,8 +216,13 @@ scheduler_check_tasks(void)
             /* reset the power and interval pulse count variables */
             interrupt_reset_power_state();
 
-            /* try to post the queued items and if it's successfull empty the queue */
-            queue_post_items_to_pvoutput();
+            if (OUTPUT_CLIENT == PVOUTPUT) {
+                /* try to post the queued items and if it's successfull empty the queue */
+                queue_post_items_to_pvoutput();
+            } else if (OUTPUT_CLIENT == THINGSPEAK) {
+                /* try to post the queue items and if it's successfull empty the queue */
+                queue_post_items_to_thingspeak();
+            }
         }
     }
 }

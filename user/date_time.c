@@ -21,7 +21,6 @@
 #include "user_interface.h"
 
 #include "date_time.h"
-
 #include "led.h"
 #include "config.h"
 
@@ -51,110 +50,111 @@ uint32
 date_time_get_dutch_dst(uint32 epoch)
 {
 #ifdef DEBUG
-    os_printf("[debug] date_time_get_dst: epoch [%u]\r\n", epoch);
+    os_printf("[debug] date_time_get_dutch_dst\r\n");
 #endif
 
-    /* convert epoch (GMT+1) to GMT */
-    uint32 epoch_gmt = epoch - ONE_HOUR;
+#ifdef DEBUG
+    os_printf("[debug] date_time_get_dst: epoch [%u]\r\n", epoch);
+#endif
 
     /*
      * The code below can be reduced by removing the wintertime checks.
      * But for debugging it's handy.
      */
-    if ((epoch_gmt > 1445742000) && (epoch_gmt < 1459047600)) {
+    if ((epoch > 1445738400) && (epoch < 1459040400)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 25-10-2015 and 27-03-2016 (wintertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 25-10-2015 and 27-03-2016 (wintertime)\r\n", epoch);
 #endif
 
         /* return wintertime */
         return(epoch);
-    } else if ((epoch_gmt > 1459047600) && (epoch_gmt < 1477796400)) {
+    } else if ((epoch > 1459040400) && (epoch < 1477792800)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 27-03-2016 and 30-10-2016 (summertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 27-03-2016 and 30-10-2016 (summertime)\r\n", epoch);
 #endif
 
         /* return summertime */
         return(epoch + ONE_HOUR);
-    } else if ((epoch_gmt > 1477796400) && (epoch_gmt < 1490497200)) {
+    } else if ((epoch > 1477792800) && (epoch < 1490490000)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 30-10-2016 and 26-03-2017 (wintertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 30-10-2016 and 26-03-2017 (wintertime)\r\n", epoch);
 #endif
 
         /* return wintertime */
         return(epoch);
-    } else if ((epoch_gmt > 1490497200) && (epoch_gmt < 1509246000)) {
+    } else if ((epoch > 1490490000) && (epoch < 1509242400)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 26-03-2017 and 29-10-2017 (summertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 26-03-2017 and 29-10-2017 (summertime)\r\n", epoch);
 #endif
 
         /* return summertime */
         return(epoch + ONE_HOUR);
-    } else if ((epoch_gmt > 1509246000) && (epoch_gmt < 1521946800)) {
+    } else if ((epoch > 1509242400) && (epoch < 1521939600)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 29-10-2017 and 25-03-2018 (wintertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 29-10-2017 and 25-03-2018 (wintertime)\r\n", epoch);
 #endif
 
         /* return wintertime */
         return(epoch);
-    } else if ((epoch_gmt > 1521946800) && (epoch_gmt < 1540695600)) {
+    } else if ((epoch > 1521939600) && (epoch < 1540692000)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 25-03-2018 and 28-10-2018 (summertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 25-03-2018 and 28-10-2018 (summertime)\r\n", epoch);
 #endif
 
         /* return summertime */
         return(epoch + ONE_HOUR);
-    } else if ((epoch_gmt > 1540695600) && (epoch_gmt < 1554001200)) {
+    } else if ((epoch > 1540692000) && (epoch < 1553994000)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 28-10-2018 and 31-03-2019 (wintertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 28-10-2018 and 31-03-2019 (wintertime)\r\n", epoch);
 #endif
 
         /* return wintertime */
         return(epoch);
-    } else if ((epoch_gmt > 1554001200) && (epoch_gmt < 1572145200)) {
+    } else if ((epoch > 1553994000) && (epoch < 1572141600)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 31-03-2019 and 27-10-2019 (summertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 31-03-2019 and 27-10-2019 (summertime)\r\n", epoch);
 #endif
 
         /* return summertime */
         return(epoch + ONE_HOUR);
-    } else if ((epoch_gmt > 1572145200) && (epoch_gmt < 1585450800)) {
+    } else if ((epoch > 1572141600) && (epoch < 1585443600)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 27-10-2019 and 29-03-2020 (wintertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 27-10-2019 and 29-03-2020 (wintertime)\r\n", epoch);
 #endif
 
         /* return wintertime */
         return(epoch);
-    } else if ((epoch_gmt > 1585450800) && (epoch_gmt < 1603594800)) {
+    } else if ((epoch > 1585443600) && (epoch < 1603591200)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 29-03-2020 and 25-10-2020 (summertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 29-03-2020 and 25-10-2020 (summertime)\r\n", epoch);
 #endif
 
         /* return summertime */
         return(epoch + ONE_HOUR);
-    } else if ((epoch_gmt > 1603594800) && (epoch_gmt < 1616900400)) {
+    } else if ((epoch > 1603591200) && (epoch < 1616893200)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 25-10-2020 and 28-03-2021 (wintertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 25-10-2020 and 28-03-2021 (wintertime)\r\n", epoch);
 #endif
 
         /* return wintertime */
         return(epoch);
-    } else if ((epoch_gmt > 1616900400) && (epoch_gmt < 1635649200)) {
+    } else if ((epoch > 1616893200) && (epoch < 1635645600)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 28-03-2021 and 31-10-2021 (summertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 28-03-2021 and 31-10-2021 (summertime)\r\n", epoch);
 #endif
 
         /* return summertime */
         return(epoch + ONE_HOUR);
-    } else if ((epoch_gmt > 1635649200) && (epoch_gmt < 1648350000)) {
+    } else if ((epoch > 1635645600) && (epoch < 1648342800)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 31-10-2021 and 27-03-2022 (wintertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 31-10-2021 and 27-03-2022 (wintertime)\r\n", epoch);
 #endif
 
         /* return wintertime */
         return(epoch);
-    } else if ((epoch_gmt > 1648350000) && (epoch_gmt < 1667098800)) {
+    } else if ((epoch > 1648342800) && (epoch < 1667095200)) {
 #ifdef DEBUG
-        os_printf("[debug] date_time_get_dst: epoch_gmt [%u] between 27-03-2022 and 30-10-2022 (summertime)\r\n", epoch_gmt);
+        os_printf("[debug] date_time_get_dst: epoch [%u] between 27-03-2022 and 30-10-2022 (summertime)\r\n", epoch);
 #endif
 
         /* return summertime */
@@ -162,7 +162,8 @@ date_time_get_dutch_dst(uint32 epoch)
     }
 
     /* if no match found, return the wintertime */
-    os_printf("[info] date_time_get_dst: no dst match found, returning wintertime!\r\n");
+    os_printf("[%s] [error] date_time_get_dst: no dst match found, returning wintertime!\r\n", date_time_get_ts());
+
     return(epoch);
 }
 #endif
@@ -170,6 +171,10 @@ date_time_get_dutch_dst(uint32 epoch)
 void
 epoch_to_date_time(date_time_t* date_time, uint32 epoch)
 {
+#ifdef DEBUG
+    os_printf("[debug] epoch_to_date_time\r\n");
+#endif
+
 #ifdef ENABLE_DUCTH_DST_TIME
     /* align the epoch time to the year 2000 dst time */
     epoch = date_time_get_dutch_dst(epoch) - THIRTY_YEAR_EPOCH;
@@ -218,6 +223,9 @@ date_time_format_line()
     /*
      * PVOutput API date format: 20151130
      * PVOutput API time format: 13:00
+     *
+     * ThingSpeak API date format: 2015-11-30
+     * ThingSpeak API time format: 13:00:00
      */
 
     date_time_t date_time;
@@ -228,21 +236,89 @@ date_time_format_line()
         date_time.second, date_time.minute, date_time.hour, date_time.day, date_time.month, date_time.year);
 #endif
 
-    /* store the date */
-    os_sprintf(date, "20%u%02u%02u", date_time.year, date_time.month, date_time.day); 
+    if (OUTPUT_CLIENT == PVOUTPUT) {
+#ifdef DEBUG
+    os_printf("[debug] date_time_format_line: formatting date/time to pvoutput strings\r\n");
+#endif
 
-    /* null terminate the date buffer */
-    date[sizeof(date) - 1] = '\0';
+        /* clear the date buffer */
+        os_memset(date, 0, sizeof(date));
 
-    /* store the time */
-    os_sprintf(time, "%02u:%02u", date_time.hour, date_time.minute); 
+        /* store the date */
+        os_sprintf(date, "20%u%02u%02u", date_time.year, date_time.month, date_time.day); 
 
-    /* null terminate the time buffer */
-    time[sizeof(time) - 1] = '\0';
+        /* null terminate the date buffer */
+        date[sizeof(date) - 1] = '\0';
+
+        /* clear the time buffer */
+        os_memset(time, 0, sizeof(time));
+
+        /* store the time */
+        os_sprintf(time, "%02u:%02u", date_time.hour, date_time.minute); 
+
+        /* null terminate the time buffer */
+        time[sizeof(time) - 1] = '\0';
+    } else if (OUTPUT_CLIENT == THINGSPEAK) {
+#ifdef DEBUG
+    os_printf("[debug] date_time_format_line: formatting date/time to thingspeak strings\r\n");
+#endif
+
+        /* clear the date buffer */
+        os_memset(date, 0, sizeof(date));
+
+        /* store the date */
+        os_sprintf(date, "20%u-%02u-%02u", date_time.year, date_time.month, date_time.day); 
+
+        /* null terminate the date buffer */
+        date[sizeof(date) - 1] = '\0';
+
+        /* clear the time buffer */
+        os_memset(time, 0, sizeof(time));
+
+        /* store the time */
+        os_sprintf(time, "%02u:%02u:00", date_time.hour, date_time.minute); 
+
+        /* null terminate the time buffer */
+        time[sizeof(time) - 1] = '\0';
+    }
 
 #ifdef DEBUG
     os_printf("[debug] date_time_format_line: date: [%s] | time: [%s]\r\n", date, time);
 #endif
+}
+
+char
+*date_time_get_ts()
+{
+#ifdef DEBUG
+    os_printf("[debug] date_time_get_ts\r\n");
+#endif
+
+    if (sntp_get_current_timestamp() == 0)
+        return("ts not set");
+
+    static char ts[64];
+
+    date_time_t date_time;
+    epoch_to_date_time(&date_time, sntp_get_current_timestamp());
+
+#ifdef DEBUG
+    os_printf("[debug] date_time_get_ts: second: [%u] | minute: [%u] | hour: [%u] | day: [%u] | month: [%u] | year: [%u]\r\n",
+        date_time.second, date_time.minute, date_time.hour, date_time.day, date_time.month, date_time.year);
+#endif
+
+    /* clear the date buffer */
+    os_memset(ts, 0, sizeof(ts));
+
+    /* store the date */
+    os_sprintf(ts, "20%u-%02u-%02u %02u:%02u:%02u", date_time.year, date_time.month, date_time.day, date_time.hour, date_time.minute, date_time.second);
+
+#ifdef DEBUG
+    os_printf("[debug] date_time_get_ts: timestamp -> [%s]\r\n", ts);
+#endif
+
+    /* return the timestamp */
+    return(ts);
 }
 
 void

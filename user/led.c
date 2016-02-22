@@ -32,6 +32,7 @@
 
 #include "led.h"
 #include "config.h"
+#include "date_time.h"
 
 /* initialize the LED status to OFF */
 static int green_led_status = LED_OFF;
@@ -137,7 +138,7 @@ LED_toggle(int lid, int new_status)
 
             break;
         default:
-            os_printf("[error] unknown LED id!\r\n"); 
+            os_printf("[%s] [error] unknown LED id!\r\n", date_time_get_ts());
 
             break;
             ;;

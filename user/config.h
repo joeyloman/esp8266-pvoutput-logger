@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "defs.h"
+
 /*
  * debug configuration
  */
@@ -33,11 +35,14 @@
 #define WIFI_PASS "<Put your wifi password here>"
 
 /*
- * kWh configuration
+ * Power configuration
  */
 
-/* number of blinks per kWh of your meter */
+/* number of blinks per kWh of your meter (max value: 1000) */
 #define PULSE_FACTOR 1000
+
+/* max watt power of your system */
+#define MAX_WATT_POWER 3924
 
 
 /*
@@ -64,8 +69,25 @@
 
 
 /*
+ * output client configuration
+ */
+
+/* choose your output client, options: PVOUTPUT or THINGSPEAK */
+#define OUTPUT_CLIENT   PVOUTPUT
+
+
+/*
  * PVoutput configuration
  */
 
 #define PVOUTPUT_APIKEY             "<Put your pvoutput apikey here>"
 #define PVOUTPUT_SYSTEMID           "<Put your pvoutput systemid here>"
+
+
+/*
+ * ThingSpeak configuration
+ */
+
+#define THINGSPEAK_APIKEY           "<Put your thingspeak apikey here>"
+#define THINGSPEAK_POWER_FIELD      "field1"
+#define THINGSPEAK_ENERGY_FIELD     "field2"
