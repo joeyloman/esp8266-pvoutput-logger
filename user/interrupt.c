@@ -117,9 +117,9 @@ power_interrupt(int8_t key)
              * skip this pulse. the pvoutput server will decline this value and your queue will not be emptied anymore!
              * note: this can also happen if the pulse took longer then the power_interrupt_lock_timer.
              */
-            if (cur_power > (MAX_WATT_POWER * 1.25)) {
+            if (cur_power > ((MAX_WATT_POWER / 100) * 125)) {
                 os_printf("[%s] [error] power_interrupt: current power [%lu W] is more then the defined one in MAX_WATT_POWER * 125% [%d W], skipping pulse!\r\n",
-                    date_time_get_ts(), cur_power, (MAX_WATT_POWER * 1.25));
+                    date_time_get_ts(), cur_power, ((MAX_WATT_POWER / 100) * 125));
 
                 /* unlock the power interrupt (pulse has a delay of 100ms) */
                 os_timer_disarm(&power_interrupt_lock_timer);
