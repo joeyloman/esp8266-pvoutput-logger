@@ -93,7 +93,7 @@ Wifi configuration:
 The number of blinks per kWh of your meter (for example: 1000 blinks):  
 \#define PULSE_FACTOR 1000
 
-The maximum power in watts your solar system can generate:
+The maximum power in watts your solar system can generate:  
 \#define MAX_WATT_POWER 3924
 
 Configure your timezone (for example GMT+1):  
