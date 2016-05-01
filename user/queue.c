@@ -108,9 +108,11 @@ queue_update_post_queue(void)
 
     /* calculate the Watt hours:
      * 1000 Wh equals 1 kWh. if we know how many pulses equals 1kWh we can divide
-     * 100Wh with the PULSE_FACTOR.
+     * it with the PULSE_FACTOR and multiply it by 1000 to get the Wh.
+     * So in theory: (pulse_count / PULSE_FACTOR) * 1000
+     * But to avoid floatingpoint numbers I use the following workaround:
      */
-    pq[queue_count].q_total_energy_gen = pulse_count * (1000 / PULSE_FACTOR);
+    pq[queue_count].q_total_energy_gen = ((pulse_count * 10000) / PULSE_FACTOR) / 10;
 
     queue_count++;
 
