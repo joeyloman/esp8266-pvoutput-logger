@@ -105,16 +105,16 @@ If you want to enable the dutch daylight savings time uncomment the following li
 Configure the post interval to pvoutput (for example: every 5 minutes):  
 \#define queue_post_interval 5
 
-Choose your output client which you want to log your data to, PVOUTPUT or THINGSPEAK:
+Choose your output client which you want to log your data to, PVOUTPUT or THINGSPEAK:  
 \#define OUTPUT_CLIENT   PVOUTPUT
 
 If you want to use PVOutput, configure the pvoutput.org API key and systemid:  
 \#define PVOUTPUT_APIKEY "<Put your pvoutput apikey here>"  
 \#define PVOUTPUT_SYSTEMID "<Put your pvoutput systemid here>"
 
-If you want to log your data to ThingSpeak, configure the API key, the power field and the energy field:
-\#define THINGSPEAK_APIKEY "<Put your thingspeak apikey here>"
-\#define THINGSPEAK_POWER_FIELD "field1"
+If you want to log your data to ThingSpeak, configure the API key, the power field and the energy field:  
+\#define THINGSPEAK_APIKEY "<Put your thingspeak apikey here>"  
+\#define THINGSPEAK_POWER_FIELD "field1"  
 \#define THINGSPEAK_ENERGY_FIELD "field2"
 
 ####Build the firmware and flash your chip:
