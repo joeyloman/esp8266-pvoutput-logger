@@ -188,6 +188,19 @@ scheduler_check_tasks(void)
                 interrupt_reset_total_energy_state();
             }
 
+            /* for some reason it can happen that the energy states are not correctly reset on 00:00,
+             * so for the time being we are gonna do an extra check/reset
+             */
+            if ((date_time.hour == 0) && (date_time.minute == 5)) {
+                if (interval_pulse_count != pulse_count) {
+                    /* reset the pulse_count to the interval_pulse_count */
+                    os_printf("[error] scheduler_check_tasks: pulse_count [%u] not equals interval_pulse_count [%u] at 00:05, syncing values..\r\n",
+                        pulse_count, interval_pulse_count);
+
+                    pulse_count = interval_pulse_count;
+                }
+            }
+
             /* update the post queue */
             queue_update_post_queue();
 
@@ -208,6 +221,19 @@ scheduler_check_tasks(void)
             /* if it's 00:00 reset all counters */
             if ((date_time.hour == 0) && (date_time.minute == 0)) {
                 interrupt_reset_total_energy_state();
+            }
+
+            /* for some reason it can happen that the energy states are not correctly reset on 00:00,
+             * so for the time being we are gonna do an extra check/reset
+             */
+            if ((date_time.hour == 0) && (date_time.minute == 15)) {
+                if (interval_pulse_count != pulse_count) {
+                    /* reset the pulse_count to the interval_pulse_count */
+                    os_printf("[error] scheduler_check_tasks: pulse_count [%u] not equals interval_pulse_count [%u] at 00:15, syncing values..\r\n",
+                        pulse_count, interval_pulse_count);
+
+                    pulse_count = interval_pulse_count;
+                }
             }
 
             /* update the post queue */
