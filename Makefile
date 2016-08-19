@@ -33,7 +33,7 @@ SDK:=$(ESP_DEVEL_FOLDER)/esp_iot_sdk/esp_iot_sdk-latest
 PORT:=/dev/ttyUSB0
 
 XTLIB:=$(SDK)/lib
-XTGCCLIB:=$(GCC_FOLDER)/lib/gcc/xtensa-lx106-elf/4.8.2/libgcc.a
+XTGCCLIB:=$(GCC_FOLDER)/lib/gcc/xtensa-lx106-elf/4.8.5/libgcc.a
 FOLDERPREFIX:=$(GCC_FOLDER)/bin
 PREFIX:=$(FOLDERPREFIX)/xtensa-lx106-elf-
 CC:=$(PREFIX)gcc

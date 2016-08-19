@@ -8,7 +8,7 @@ First create a build environment on your favorite Linux distro (or maybe Cygwin 
 
 ###Install the required build packages
 
-####Fedora 23
+####Fedora 24
 Add the rpmfusion repos:
 
     sudo dnf install --nogpgcheck \
@@ -18,8 +18,8 @@ Add the rpmfusion repos:
 Install the required packages:
 
     sudo dnf install make unrar autoconf automake libtool gcc gcc-c++ gperf flex \
-    bison texinfo gawk ncurses-devel expat-devel python sed git pyserial patch \
-    wget which file unzip bzip2
+    bison texinfo gawk ncurses-devel expat-devel python python-devel sed git pyserial \
+    patch wget which file unzip bzip2 help2man
     
 ####Debian 8 Jessie
 
