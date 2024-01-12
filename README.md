@@ -1,14 +1,14 @@
-#esp8266-pvoutput-logger
+# esp8266-pvoutput-logger
 
 Esp8266-pvoutput-logger is a kWh meter s0 pulse log application for pvoutput.org. It's designed on a ESP8266 ESP-12E WIFI Development Board. It has a built-in time service, interrupt handler, led control service, pvoutput.org client, queueing mechanism and scheduler service. It's main purpose is to monitor the energy output from your solar panels if you don't have a method to connect your converter to pvoutput.org.
 
-##Putting the software on your ESP chip
+## Putting the software on your ESP chip
 
 First create a build environment on your favorite Linux distro (or maybe Cygwin under Windows?). The following steps will show you how to create it on Fedora or Debian (tested on x86 and ARM):
 
-###Install the required build packages
+### Install the required build packages
 
-####Fedora 24
+#### Fedora 24
 Add the rpmfusion repos:
 
     sudo dnf install --nogpgcheck \
@@ -21,7 +21,7 @@ Install the required packages:
     bison texinfo gawk ncurses-devel expat-devel python python-devel sed git pyserial \
     patch wget which file unzip bzip2 help2man
     
-####Debian 8 Jessie
+#### Debian 8 Jessie
 
 Install the required packages:
 
@@ -29,7 +29,7 @@ Install the required packages:
     bison texinfo gawk libncurses5-dev libexpat1-dev python sed git python-serial patch \
     wget file unzip bzip2 libtool-bin
 
-###Create the ESP build environment
+### Create the ESP build environment
 
 Create the build directory:
 
@@ -76,15 +76,15 @@ Get the internet of things SDK:
     unzip esp_iot_sdk_V1.5.2_16_01_29.zip
     ln -s esp_iot_sdk_v1.5.2 esp_iot_sdk-latest
 
-###Building the software
+### Building the software
 
-####First fetch the software from git:
+#### First fetch the software from git:
 
     cd ~/esp-devel
     git clone https://github.com/joeyloman/esp8266-pvoutput-logger.git
     cd esp8266-pvoutput-logger
 
-####Configure the parameters in user/config.h:
+#### Configure the parameters in user/config.h:
 
 Wifi configuration:  
 \#define WIFI\_SSID "<Put your wifi SSID here>"  
@@ -117,7 +117,7 @@ If you want to log your data to ThingSpeak, configure the API key, the power fie
 \#define THINGSPEAK_POWER_FIELD "field1"  
 \#define THINGSPEAK_ENERGY_FIELD "field2"
 
-####Build the firmware and flash your chip:
+#### Build the firmware and flash your chip:
 Execute the build.sh script:
 
     ./build.sh
